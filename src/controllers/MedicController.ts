@@ -1,10 +1,14 @@
 import { Request, Response } from 'express';
 import Medic from '../models/Medic';
+import Specialty from '../models/Specialty';
 
 interface IMedic {
   id: string;
   name: string;
-  specialty: string;
+  specialty: {
+    id: string;
+    description: string;
+  };
 }
 
 export default class MedicController {
@@ -27,21 +31,41 @@ export default class MedicController {
     response: Response,
   ): Promise<Response<IMedic>> {
     try {
-      const { name, specialty } = request.body;
+      const { name, specialty_id } = request.body;
       const medic = new Medic();
+      const Specialtys = new Specialty();
+      const AllSpecialtys = await Specialtys.list();
+      const findSpecialtyIndex = AllSpecialtys.findIndex(
+        find => find.id === specialty_id,
+      );
 
-      if (!name || !specialty) {
+      if (!findSpecialtyIndex || findSpecialtyIndex === -1 || !specialty_id) {
+        return response.status(401).json({ error: 'Specialty ID not found!' });
+      }
+
+      if (!name || !specialty_id) {
         return response
           .status(401)
           .json({ error: 'please fill in the fields "name";"specialty" ' });
       }
 
+      const specialty = AllSpecialtys[findSpecialtyIndex];
+
       const newMedic = await medic.create({
         name,
-        specialty,
+        specialty_id,
       });
 
-      return response.json(newMedic);
+      const MedicSpecialty = {
+        id: newMedic.id,
+        name: newMedic.name,
+        specialty: {
+          id: specialty.id,
+          description: specialty.description,
+        },
+      };
+
+      return response.json(MedicSpecialty);
     } catch (error) {
       return response.status(500).json({ error: 'Error' });
     }
@@ -53,7 +77,7 @@ export default class MedicController {
   ): Promise<Response<IMedic> | Response> {
     try {
       const Medics = new Medic();
-      const { name, specialty } = request.body;
+      const { name, specialty_id } = request.body;
       const { id } = request.params;
 
       const AllMedics = await Medics.list();
@@ -66,7 +90,7 @@ export default class MedicController {
       const UpdatedMedic = await Medics.update({
         id,
         name,
-        specialty,
+        specialty_id,
       });
 
       return response.status(200).json(UpdatedMedic);

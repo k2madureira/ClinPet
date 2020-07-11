@@ -1,5 +1,5 @@
 export default interface ICreateMedicDTO {
   id: string;
   name: string;
-  specialty: string;
+  specialty_id: string;
 }

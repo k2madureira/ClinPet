@@ -2,11 +2,26 @@
   {
     "id": "b155b43c-3238-4f92-b17f-7889c0c42976",
     "name": "João",
-    "specialty": "Cardiologista"
+    "specialty_id": "b155b43c-3238-4f92-b17f-7889c0c42896"
   },
   {
     "id": "fe8d2a56-e70c-44d6-b7fd-6f131b04a5ef",
     "name": "Maria Joana da silva",
-    "specialty": "Pneumologista"
+    "specialty_id": "fe8d2a56-e70c-44d6-b7fd-6f131b04a5ec"
+  },
+  {
+    "id": "ec505cf6-a1da-4672-ad95-976af6840146",
+    "name": "Maria",
+    "specialty_id": "1552"
+  },
+  {
+    "id": "e8d7ca39-41cd-408a-9689-c0c7ee9d9c4d",
+    "name": "Maria",
+    "specialty_id": "fe8d2a56-e70c-44d6-b7fd-6f131b04a5ec"
+  },
+  {
+    "id": "e87e3ba2-9d57-410f-acd2-4888ddaf8c16",
+    "name": "Pedro",
+    "specialty_id": "fe8d2a56-e70c-44d6-b7fd-6f131b04a5ec"
   }
 ]
