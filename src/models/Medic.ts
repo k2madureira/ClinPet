@@ -64,7 +64,8 @@ export default class Medic implements IMedicRepository {
 
   public async delete(id: string): Promise<void> {
     const MedicIndex = this.medics.findIndex(find => find.id === id);
-    this.medics.slice(MedicIndex, 1);
+    this.medics.splice(MedicIndex, 1);
+
     fs.writeFileSync(this.path, JSON.stringify(this.medics, null, 2));
   }
 }

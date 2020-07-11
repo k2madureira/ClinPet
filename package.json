@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc",
     "start": "ts-node src/shared/infra/http/server.ts",
-    "dev:server": "ts-node-dev --ignore-watch node_modules src/server.ts",
+    "dev:server": "ts-node-dev --respawn --transpile-only --ignore-watch node_modules src/server.ts",
     "test": "jest"
   },
 
