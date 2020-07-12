@@ -4,12 +4,6 @@ import fs from 'fs';
 import IMedicRepository from '../repositories/IMedicRepository';
 import ICreateMedicDTO from '../dtos/ICreateMedicDTO';
 
-interface IMedic {
-  id?: string;
-  name: string;
-  specialty_id: string;
-}
-
 export default class Medic implements IMedicRepository {
   medics: Array<ICreateMedicDTO> = [];
 
@@ -42,7 +36,7 @@ export default class Medic implements IMedicRepository {
   public async create({
     name,
     specialty_id,
-  }: IMedic): Promise<ICreateMedicDTO> {
+  }: ICreateMedicDTO): Promise<ICreateMedicDTO> {
     const medic = {
       id: uuid(),
       name,
@@ -59,13 +53,13 @@ export default class Medic implements IMedicRepository {
     id,
     name,
     specialty_id,
-  }: IMedic): Promise<ICreateMedicDTO> {
+  }: ICreateMedicDTO): Promise<ICreateMedicDTO> {
     const findMedicIndex = this.medics.findIndex(find => find.id === id);
 
     const medic = {
-      id: this.medics[findMedicIndex].id,
-      name: name || this.medics[findMedicIndex].name,
-      specialty_id: specialty_id || this.medics[findMedicIndex].specialty_id,
+      id,
+      name,
+      specialty_id,
     };
 
     this.medics[findMedicIndex] = medic;

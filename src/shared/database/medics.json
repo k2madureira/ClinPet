@@ -18,5 +18,10 @@
     "id": "e87e3ba2-9d57-410f-acd2-4888ddaf8c16",
     "name": "Pedro",
     "specialty_id": "fe8d2a56-e70c-44d6-b7fd-6f131b04a5ec"
+  },
+  {
+    "id": "70aac942-c6ac-4c6e-8879-c58024d2481a",
+    "name": "Gari",
+    "specialty_id": "b155b43c-3238-4f92-b17f-7889c0c42896"
   }
 ]

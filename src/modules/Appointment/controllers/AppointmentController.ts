@@ -64,19 +64,28 @@ export default class AppointmentController {
         urgent,
         status,
         specialty_id,
+        medic_id,
       } = request.body;
+      const Medics = new Medic();
       const appointment = new Appointment();
-      const Specialtys = new Specialty();
-      const AllSpecialtys = await Specialtys.list();
-      const findSpecialtyIndex = AllSpecialtys.findIndex(
-        find => find.id === specialty_id,
+      const specialtys = new Specialty();
+      const allSpecialtys = await specialtys.list();
+      const allMedics = await Medics.list();
+      const findSpecialty = allSpecialtys.find(
+        specialty => specialty.id === specialty_id,
       );
 
-      if (findSpecialtyIndex === -1 || !specialty_id) {
+      if (!findSpecialty && specialty_id) {
         return response.status(401).json({
           error: 'Specialty ID not found!. Please select one these:',
-          Specialtys: AllSpecialtys,
+          Specialtys: allSpecialtys,
         });
+      }
+
+      const currentMedic = allMedics.find(me => me.id === medic_id);
+
+      if (!currentMedic) {
+        return response.status(401).json({ error: 'Medic ID not found!' });
       }
 
       if (!name || !specialty_id || !species) {
@@ -98,17 +107,18 @@ export default class AppointmentController {
           error: `please fill in the field status with [ Atendido ; Pendente ; Cancelado] ${v}`,
         });
       }
-      const specialty = AllSpecialtys[findSpecialtyIndex];
 
       const newAppointment = await appointment.create({
         name,
         species,
         breed,
         specialty_id,
+        medic_id,
         urgent,
         status,
       });
 
+      delete currentMedic.specialty_id;
       const AppointmentResponse = {
         id: newAppointment.id,
         name,
@@ -116,9 +126,10 @@ export default class AppointmentController {
         breed,
         urgent,
         status: newAppointment.status,
-        specialty: {
-          id: specialty.id,
-          description: specialty.description,
+        medic: {
+          id: currentMedic.id,
+          name: currentMedic.name,
+          specialty: allSpecialtys.find(sp => sp.id === specialty_id),
         },
       };
 

@@ -1,21 +1,13 @@
 import { Request, Response } from 'express';
 import Specialty from '@modules/Specialty/models/Specialty';
 import Medic from '../models/Medic';
-
-interface IMedic {
-  id: string;
-  name: string;
-  specialty: {
-    id: string;
-    description: string;
-  };
-}
+import ICreateMedicDTO from '../dtos/ICreateMedicDTO';
 
 export default class MedicController {
   public async index(
     _: Request,
     response: Response,
-  ): Promise<Response<IMedic[]>> {
+  ): Promise<Response<ICreateMedicDTO[]>> {
     try {
       const Medics = new Medic();
       const listMedics = await Medics.list();
@@ -47,30 +39,31 @@ export default class MedicController {
   public async create(
     request: Request,
     response: Response,
-  ): Promise<Response<IMedic>> {
+  ): Promise<Response<ICreateMedicDTO>> {
     try {
       const { name, specialty_id } = request.body;
       const medic = new Medic();
-      const Specialtys = new Specialty();
-      const AllSpecialtys = await Specialtys.list();
-      const findSpecialtyIndex = AllSpecialtys.findIndex(
+      const specialtys = new Specialty();
+
+      const allSpecialtys = await specialtys.list();
+      const findSpecialtyIndex = allSpecialtys.findIndex(
         find => find.id === specialty_id,
       );
-
-      if (findSpecialtyIndex === -1 || !specialty_id) {
-        return response.status(401).json({
-          error: 'Specialty ID not found!. Please select one these:',
-          Specialtys: AllSpecialtys,
-        });
-      }
 
       if (!name || !specialty_id) {
         return response
           .status(401)
-          .json({ error: 'please fill in the fields "name";"specialty_id" ' });
+          .json({ error: 'please fill in the fields [name, specialty_id] ' });
       }
 
-      const specialty = AllSpecialtys[findSpecialtyIndex];
+      if (findSpecialtyIndex === -1 || !specialty_id) {
+        return response.status(401).json({
+          error: 'Specialty ID not found!. Please select one these:',
+          Specialtys: allSpecialtys,
+        });
+      }
+
+      const specialty = allSpecialtys[findSpecialtyIndex];
 
       const newMedic = await medic.create({
         name,
@@ -95,7 +88,7 @@ export default class MedicController {
   public async update(
     request: Request,
     response: Response,
-  ): Promise<Response<IMedic> | Response> {
+  ): Promise<Response<ICreateMedicDTO> | Response> {
     try {
       const { name, specialty_id } = request.body;
       const { id } = request.params;
@@ -103,11 +96,11 @@ export default class MedicController {
       const Medics = new Medic();
       const Specialtys = new Specialty();
       const AllSpecialtys = await Specialtys.list();
-      const findSpecialtyIndex = AllSpecialtys.findIndex(
-        find => find.id === specialty_id,
+      const findSpecialty = AllSpecialtys.find(
+        specialty => specialty.id === specialty_id,
       );
 
-      if (specialty_id && findSpecialtyIndex === -1) {
+      if (!findSpecialty && specialty_id) {
         return response.status(401).json({
           error: 'Specialty ID not found!. Please select one these:',
           Specialtys: AllSpecialtys,
@@ -115,27 +108,24 @@ export default class MedicController {
       }
 
       const AllMedics = await Medics.list();
-      const findMedicIndex = AllMedics.findIndex(find => find.id === id);
+      const currentMedic = AllMedics.find(medic => medic.id === id);
 
-      if (findMedicIndex === -1 || !id) {
+      if (!currentMedic) {
         return response.status(401).json({ error: 'Medic ID not found!' });
       }
 
       const UpdatedMedic = await Medics.update({
         id,
-        name,
-        specialty_id,
+        name: name || currentMedic.name,
+        specialty_id: specialty_id || currentMedic.specialty_id,
       });
-
-      const specialty = AllSpecialtys[findSpecialtyIndex];
 
       const MedicSpecialty = {
         id: UpdatedMedic.id,
         name: UpdatedMedic.name,
-        specialty: {
-          id: specialty.id,
-          description: specialty.description,
-        },
+        specialty: AllSpecialtys.find(
+          sp => sp.id === UpdatedMedic.specialty_id,
+        ),
       };
 
       return response.status(200).json(MedicSpecialty);

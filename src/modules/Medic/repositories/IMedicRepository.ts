@@ -1,14 +1,8 @@
 import ICreateMedicDTO from '../dtos/ICreateMedicDTO';
 
-interface IMedic {
-  id: string;
-  name: string;
-  specialty_id: string;
-}
-
 export default interface IMedicRepository {
-  list(data: ICreateMedicDTO): Promise<IMedic[]>;
-  create(data: ICreateMedicDTO): Promise<IMedic>;
-  update(data: ICreateMedicDTO): Promise<IMedic>;
+  list(data: ICreateMedicDTO): Promise<ICreateMedicDTO[]>;
+  create(data: ICreateMedicDTO): Promise<ICreateMedicDTO>;
+  update(data: ICreateMedicDTO): Promise<ICreateMedicDTO>;
   delete(id: string): Promise<void>;
 }

@@ -34,11 +34,20 @@ export default class Appointment implements IAppointmentRepository {
     });
   }
 
+  public async listById(id: string): Promise<ICreateAppointmentDTO[]> {
+    return this.appointments
+      .filter(medic => medic.id === id)
+      .sort((a, b) => {
+        return a.urgent < b.urgent ? 1 : -1;
+      });
+  }
+
   public async create({
     name,
     species,
     breed,
     specialty_id,
+    medic_id,
     urgent,
     status,
   }: ICreateAppointmentDTO): Promise<ICreateAppointmentDTO> {
@@ -48,6 +57,7 @@ export default class Appointment implements IAppointmentRepository {
       species,
       breed,
       specialty_id,
+      medic_id,
       urgent: urgent || false,
       status: status || 'Pendente',
     };
