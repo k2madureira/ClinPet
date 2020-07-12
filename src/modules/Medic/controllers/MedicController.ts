@@ -117,7 +117,7 @@ export default class MedicController {
       const AllMedics = await Medics.list();
       const findMedicIndex = AllMedics.findIndex(find => find.id === id);
 
-      if (!findMedicIndex || findMedicIndex === -1 || !id) {
+      if (findMedicIndex === -1 || !id) {
         return response.status(401).json({ error: 'Medic ID not found!' });
       }
 

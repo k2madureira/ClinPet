@@ -14,6 +14,8 @@ routes.put('/medic/:id', medicController.update);
 routes.delete('/medic/:id', medicController.delete);
 
 routes.get('/appointment', appointmetController.index);
+routes.get('/appointment/medic/:id', appointmetController.findMedicAppointment);
+
 routes.post('/appointment', appointmetController.create);
 routes.patch('/appointment/:id', appointmetController.update);
 routes.delete('/appointment/:id', appointmetController.delete);

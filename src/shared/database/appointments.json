@@ -15,7 +15,7 @@
     "breed": "",
     "specialty_id": "b155b43c-3238-4f92-b17f-7889c0c42896",
     "urgent": true,
-    "status": "Pendente"
+    "status": "Atendido"
   },
   {
     "id": "f93b3527-b7e8-443f-9274-899fd45afc65",
@@ -24,7 +24,7 @@
     "breed": "siames",
     "specialty_id": "b155b43c-3238-4f92-b17f-7889c0c42896",
     "urgent": false,
-    "status": "A"
+    "status": "Cancelado"
   },
   {
     "id": "ef117fbe-4a2a-4a7e-9587-d6e1e73f1b5d",
@@ -33,7 +33,7 @@
     "breed": "siames",
     "specialty_id": "b155b43c-3238-4f92-b17f-7889c0c42896",
     "urgent": false,
-    "status": "Pendente"
+    "status": "Atendido"
   },
   {
     "id": "72ef6534-f7a2-4677-b257-9d9703f81acc",
@@ -42,6 +42,6 @@
     "breed": "siames",
     "specialty_id": "b155b43c-3238-4f92-b17f-7889c0c42896",
     "urgent": false,
-    "status": "Atendido"
+    "status": "Pendente"
   }
 ]

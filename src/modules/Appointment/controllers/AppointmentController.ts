@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import Specialty from '@modules/Specialty/models/Specialty';
+import Medic from '@modules/Medic/models/Medic';
 import Appointment from '../models/Appointment';
 import IAppointmentDTO from '../dtos/ICreateAppointmentDTO';
 
@@ -17,6 +18,38 @@ export default class AppointmentController {
     } catch (error) {
       return response.status(500).json({ error: 'Error' });
     }
+  }
+
+  public async findMedicAppointment(
+    request: Request,
+    response: Response,
+  ): Promise<Response<IAppointmentDTO>> {
+    const { id } = request.params;
+    const Appointments = new Appointment();
+    const Medics = new Medic();
+
+    const appointments = await Appointments.list();
+    const medics = await Medics.list();
+
+    const findMedicIndex = medics.findIndex(find => find.id === id);
+
+    if (findMedicIndex === -1 || !id) {
+      return response.status(401).json({ error: 'Medic ID not found!' });
+    }
+
+    const medic = medics[findMedicIndex];
+
+    const findNextAppointment = appointments.find(appointment => {
+      return (
+        appointment.status !== 'Atendido' &&
+        appointment.status !== 'Cancelado' &&
+        appointment.specialty_id === medic.specialty_id
+      );
+    });
+
+    return response
+      .status(200)
+      .json(findNextAppointment || { message: 'No pending appointments.' });
   }
 
   public async create(
