@@ -66,11 +66,15 @@ export default class AppointmentController {
         specialty_id,
         medic_id,
       } = request.body;
-      const Medics = new Medic();
+
+      const medics = new Medic();
       const appointment = new Appointment();
       const specialtys = new Specialty();
+
       const allSpecialtys = await specialtys.list();
-      const allMedics = await Medics.list();
+      const allMedics = await medics.list();
+
+      const currentMedic = allMedics.find(medic => medic.id === medic_id);
       const findSpecialty = allSpecialtys.find(
         specialty => specialty.id === specialty_id,
       );
@@ -81,8 +85,6 @@ export default class AppointmentController {
           Specialtys: allSpecialtys,
         });
       }
-
-      const currentMedic = allMedics.find(me => me.id === medic_id);
 
       if (!currentMedic) {
         return response.status(401).json({ error: 'Medic ID not found!' });

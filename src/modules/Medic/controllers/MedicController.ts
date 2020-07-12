@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import Specialty from '@modules/Specialty/models/Specialty';
+import Appointment from '@modules/Appointment/models/Appointment';
 import Medic from '../models/Medic';
 import ICreateMedicDTO from '../dtos/ICreateMedicDTO';
 
@@ -136,17 +137,22 @@ export default class MedicController {
 
   public async delete(request: Request, response: Response): Promise<Response> {
     try {
-      const Medics = new Medic();
+      const medics = new Medic();
+      const appointments = new Appointment();
       const { id } = request.params;
 
-      const AllMedics = await Medics.list();
-      const findMedicIndex = AllMedics.findIndex(find => find.id === id);
+      const allAppointments = await appointments.list();
+      const allMedics = await medics.list();
+      const findMedicIndex = allMedics.findIndex(find => find.id === id);
+      const findAppointmentMedic = allAppointments.find(
+        appointment => appointment.medic_id === id,
+      );
 
       if (findMedicIndex === -1 || !id) {
         return response.status(401).json({ error: 'Medic ID not found!' });
       }
 
-      await Medics.delete(id);
+      await medics.delete(id);
 
       return response.status(200).json({ success: 'deleted' });
     } catch (error) {
