@@ -15,5 +15,7 @@ routes.delete('/medic/:id', medicController.delete);
 
 routes.get('/appointment', appointmetController.index);
 routes.post('/appointment', appointmetController.create);
+routes.patch('/appointment/:id', appointmetController.update);
+routes.delete('/appointment/:id', appointmetController.delete);
 
 export default routes;

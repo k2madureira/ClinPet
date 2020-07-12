@@ -58,9 +58,21 @@ export default class Appointment implements IAppointmentRepository {
     return appointment;
   }
 
+  public async update(id: string): Promise<ICreateAppointmentDTO> {
+    const Index = this.appointments.findIndex(find => find.id === id);
+    const updatedAppointment = this.appointments[Index];
+    updatedAppointment.status = 'Atendido';
+
+    this.appointments[Index] = updatedAppointment;
+
+    fs.writeFileSync(this.path, JSON.stringify(this.appointments, null, 2));
+
+    return updatedAppointment;
+  }
+
   public async delete(id: string): Promise<void> {
-    const MedicIndex = this.appointments.findIndex(find => find.id === id);
-    this.appointments.splice(MedicIndex, 1);
+    const Index = this.appointments.findIndex(find => find.id === id);
+    this.appointments.splice(Index, 1);
 
     fs.writeFileSync(this.path, JSON.stringify(this.appointments, null, 2));
   }

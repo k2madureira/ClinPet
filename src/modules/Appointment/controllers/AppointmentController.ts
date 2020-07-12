@@ -1,17 +1,7 @@
 import { Request, Response } from 'express';
-import Medic from '@modules/Medic/models/Medic';
 import Specialty from '@modules/Specialty/models/Specialty';
 import Appointment from '../models/Appointment';
 import IAppointmentDTO from '../dtos/ICreateAppointmentDTO';
-
-interface IMedic {
-  id: string;
-  name: string;
-  specialty: {
-    id: string;
-    description: string;
-  };
-}
 
 export default class AppointmentController {
   public async index(
@@ -20,27 +10,8 @@ export default class AppointmentController {
   ): Promise<Response<IAppointmentDTO[]>> {
     try {
       const Appointments = new Appointment();
-      // const Medics = new Medic();
-      // const listMedics = await Medics.list();
-      // const Specialtys = new Specialty();
-      // const AllSpecialtys = await Specialtys.list();
+
       const appointments = await Appointments.list();
-
-      /* const AllMedics = listMedics.map(medic => {
-        const index = AllSpecialtys.findIndex(
-          find => find.id === medic.specialty_id,
-        );
-        const specialty = AllSpecialtys[index];
-
-        return {
-          id: medic.id,
-          name: medic.name,
-          specialty: {
-            id: medic.specialty_id,
-            description: specialty.description,
-          },
-        };
-      }); */
 
       return response.json(appointments);
     } catch (error) {
@@ -127,50 +98,21 @@ export default class AppointmentController {
   public async update(
     request: Request,
     response: Response,
-  ): Promise<Response<IMedic> | Response> {
+  ): Promise<Response<IAppointmentDTO> | Response> {
     try {
-      const { name, specialty_id } = request.body;
+      const Appointments = new Appointment();
+      const appointments = await Appointments.list();
       const { id } = request.params;
 
-      const Medics = new Medic();
-      const Specialtys = new Specialty();
-      const AllSpecialtys = await Specialtys.list();
-      const findSpecialtyIndex = AllSpecialtys.findIndex(
-        find => find.id === specialty_id,
-      );
+      const findIndex = appointments.findIndex(find => find.id === id);
 
-      if (specialty_id && findSpecialtyIndex === -1) {
-        return response.status(401).json({
-          error: 'Specialty ID not found!. Please select one these:',
-          Specialtys: AllSpecialtys,
-        });
+      if (findIndex === -1 || !id) {
+        return response.status(401).json({ error: 'Appointment not found!' });
       }
 
-      const AllMedics = await Medics.list();
-      const findMedicIndex = AllMedics.findIndex(find => find.id === id);
+      const updatedAppointment = await Appointments.update(id);
 
-      if (!findMedicIndex || findMedicIndex === -1 || !id) {
-        return response.status(401).json({ error: 'Medic ID not found!' });
-      }
-
-      const UpdatedMedic = await Medics.update({
-        id,
-        name,
-        specialty_id,
-      });
-
-      const specialty = AllSpecialtys[findSpecialtyIndex];
-
-      const MedicSpecialty = {
-        id: UpdatedMedic.id,
-        name: UpdatedMedic.name,
-        specialty: {
-          id: specialty.id,
-          description: specialty.description,
-        },
-      };
-
-      return response.status(200).json(MedicSpecialty);
+      return response.status(200).json(updatedAppointment);
     } catch (error) {
       return response.status(500).json({ error: 'Error' });
     }
@@ -178,17 +120,17 @@ export default class AppointmentController {
 
   public async delete(request: Request, response: Response): Promise<Response> {
     try {
-      const Medics = new Medic();
+      const Appointments = new Appointment();
+      const appointments = await Appointments.list();
       const { id } = request.params;
 
-      const AllMedics = await Medics.list();
-      const findMedicIndex = AllMedics.findIndex(find => find.id === id);
+      const findIndex = appointments.findIndex(find => find.id === id);
 
-      if (findMedicIndex === -1 || !id) {
-        return response.status(401).json({ error: 'Medic ID not found!' });
+      if (findIndex === -1 || !id) {
+        return response.status(401).json({ error: 'Appointment not found!' });
       }
 
-      await Medics.delete(id);
+      await Appointments.delete(id);
 
       return response.status(200).json({ success: 'deleted' });
     } catch (error) {
