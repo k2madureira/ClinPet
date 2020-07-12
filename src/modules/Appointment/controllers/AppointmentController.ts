@@ -17,14 +17,16 @@ export default class AppointmentController {
   public async index(
     _: Request,
     response: Response,
-  ): Promise<Response<IMedic[]>> {
+  ): Promise<Response<IAppointmentDTO[]>> {
     try {
-      const Medics = new Medic();
-      const listMedics = await Medics.list();
-      const Specialtys = new Specialty();
-      const AllSpecialtys = await Specialtys.list();
+      const Appointments = new Appointment();
+      // const Medics = new Medic();
+      // const listMedics = await Medics.list();
+      // const Specialtys = new Specialty();
+      // const AllSpecialtys = await Specialtys.list();
+      const appointments = await Appointments.list();
 
-      const AllMedics = listMedics.map(medic => {
+      /* const AllMedics = listMedics.map(medic => {
         const index = AllSpecialtys.findIndex(
           find => find.id === medic.specialty_id,
         );
@@ -38,9 +40,9 @@ export default class AppointmentController {
             description: specialty.description,
           },
         };
-      });
+      }); */
 
-      return response.json(AllMedics);
+      return response.json(appointments);
     } catch (error) {
       return response.status(500).json({ error: 'Error' });
     }
@@ -73,13 +75,25 @@ export default class AppointmentController {
         });
       }
 
-      if (!name || !specialty_id || !species || !urgent) {
+      if (!name || !specialty_id || !species) {
         return response.status(401).json({
           error:
-            'please fill in the fields "name";"specialty_id"; "species" ; "urgent" ',
+            'please fill in the fields [name, specialty_id, species, urgent] ',
         });
       }
 
+      const v = status === 'Atendido';
+
+      if (
+        status &&
+        status !== 'Pendente' &&
+        status !== 'Cancelado' &&
+        status !== 'Atendido'
+      ) {
+        return response.status(401).json({
+          error: `please fill in the field status with [ Atendido ; Pendente ; Cancelado] ${v}`,
+        });
+      }
       const specialty = AllSpecialtys[findSpecialtyIndex];
 
       const newAppointment = await appointment.create({
@@ -97,7 +111,7 @@ export default class AppointmentController {
         species,
         breed,
         urgent,
-        status,
+        status: newAppointment.status,
         specialty: {
           id: specialty.id,
           description: specialty.description,

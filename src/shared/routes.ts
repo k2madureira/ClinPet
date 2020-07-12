@@ -13,6 +13,7 @@ routes.get('/medic', medicController.index);
 routes.put('/medic/:id', medicController.update);
 routes.delete('/medic/:id', medicController.delete);
 
+routes.get('/appointment', appointmetController.index);
 routes.post('/appointment', appointmetController.create);
 
 export default routes;
