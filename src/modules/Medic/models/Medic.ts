@@ -1,7 +1,7 @@
 import { uuid } from 'uuidv4';
 import { resolve } from 'path';
 import fs from 'fs';
-import IMedicRepository from './repositories/IMedicRepository';
+import IMedicRepository from '../repositories/IMedicRepository';
 import ICreateMedicDTO from '../dtos/ICreateMedicDTO';
 
 interface IMedic {
@@ -17,11 +17,20 @@ export default class Medic implements IMedicRepository {
 
   constructor() {
     this.medics = [];
-    this.path = resolve(__dirname, '..', 'database', 'medics.json');
+    this.path = resolve(
+      __dirname,
+      '..',
+      '..',
+      '..',
+      'shared',
+      'database',
+      'medics.json',
+    );
     this.loadJson();
   }
 
   loadJson(): void {
+    // console.log(this.path);
     const data = fs.readFileSync(this.path);
     this.medics = JSON.parse(data.toString());
   }

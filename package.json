@@ -5,8 +5,8 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "start": "ts-node src/shared/infra/http/server.ts",
-    "dev:server": "ts-node-dev --respawn --transpile-only --ignore-watch node_modules src/server.ts",
+    "start": "ts-node -r tsconfig-paths/register src/shared/server.ts",
+    "dev:server": "ts-node-dev -r tsconfig-paths/register --respawn --transpile-only --ignore-watch node_modules src/shared/server.ts",
     "test": "jest"
   },
 

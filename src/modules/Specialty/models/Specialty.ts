@@ -15,7 +15,15 @@ export default class Specialty {
 
   constructor() {
     this.specialtys = [];
-    this.path = resolve(__dirname, '..', 'database', 'specialtys.json');
+    this.path = resolve(
+      __dirname,
+      '..',
+      '..',
+      '..',
+      'shared',
+      'database',
+      'specialtys.json',
+    );
     this.loadJson();
   }
 
