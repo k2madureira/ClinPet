@@ -1,12 +1,7 @@
-// import { uuid } from 'uuidv4';
+import { uuid } from 'uuidv4';
 import { resolve } from 'path';
 import fs from 'fs';
 import ICreateSpecialtyDTO from '../dtos/ICreateSpecialtyDTO';
-
-interface ISpecialty {
-  id?: string;
-  description: string;
-}
 
 export default class Specialty {
   specialtys: Array<ICreateSpecialtyDTO> = [];
@@ -34,5 +29,26 @@ export default class Specialty {
 
   public async list(): Promise<ICreateSpecialtyDTO[]> {
     return this.specialtys;
+  }
+
+  public async create({
+    description,
+  }: ICreateSpecialtyDTO): Promise<ICreateSpecialtyDTO> {
+    const specialty = {
+      id: uuid(),
+      description,
+    };
+
+    this.specialtys.push(specialty);
+    fs.writeFileSync(this.path, JSON.stringify(this.specialtys, null, 2));
+
+    return specialty;
+  }
+
+  public async delete(id: string): Promise<void> {
+    const SpecialtyIndex = this.specialtys.findIndex(find => find.id === id);
+    this.specialtys.splice(SpecialtyIndex, 1);
+
+    fs.writeFileSync(this.path, JSON.stringify(this.specialtys, null, 2));
   }
 }

@@ -1,4 +1,4 @@
 export default interface ICreateSpecialtyDTO {
-  id: string;
+  id?: string;
   description: string;
 }
