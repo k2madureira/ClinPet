@@ -5,7 +5,8 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "start": "ts-node -r tsconfig-paths/register src/shared/server.ts",
+    "start": "node dist/src/shared/server.js",
+    "start:ts": "ts-node -r tsconfig-paths/register src/shared/server.ts",
     "dev:server": "ts-node-dev -r tsconfig-paths/register --respawn --transpile-only --ignore-watch node_modules src/shared/server.ts",
     "test": "jest --no-cache",
     "test:clean": "jest --clearCache",
