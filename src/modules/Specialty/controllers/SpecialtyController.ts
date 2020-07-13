@@ -65,7 +65,7 @@ export default class SpecialtyController {
 
       const findSpecialty = allSpecialtys.find(find => find.id === id);
 
-      if (findSpecialty) {
+      if (!findSpecialty) {
         return response.status(401).json({ error: 'Specialty ID not found!' });
       }
 

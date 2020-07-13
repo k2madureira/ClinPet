@@ -31,7 +31,7 @@ export default class MedicController {
         };
       });
 
-      return response.json(AllMedics);
+      return response.json({ medics: AllMedics });
     } catch (error) {
       return response.status(500).json({ error: 'Error' });
     }

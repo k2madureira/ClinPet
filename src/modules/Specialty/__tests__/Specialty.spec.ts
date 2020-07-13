@@ -29,13 +29,19 @@ describe('Specialty', () => {
       .send({ description: '_DESCRIPTION_' });
 
     await request(app).delete(`/specialty/${specialty_1.body.id}`);
+    await request(app).delete(`/specialty/${specialty_2.body.id}`);
 
     expect(specialty_2.body).toHaveProperty('error');
   });
 
-  it('Should not be able to list specialtys', async () => {
-    const specialty = await request(app).get('/specialty');
+  it('Should  be able to list specialtys', async () => {
+    const specialty = await request(app)
+      .post('/specialty')
+      .send({ description: '_DESCRIPTION_' });
 
-    expect(specialty.body).toHaveProperty('specialtys');
+    const specialtys = await request(app).get('/specialty');
+    await request(app).delete(`/specialty/${specialty.body.id}`);
+
+    expect(specialtys.body).toHaveProperty('specialtys');
   });
 });

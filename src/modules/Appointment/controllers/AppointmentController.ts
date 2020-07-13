@@ -69,8 +69,7 @@ export default class AppointmentController {
       return (
         appointment.status !== 'Atendido' &&
         appointment.status !== 'Cancelado' &&
-        (appointment.medic_id === currentMedic.id ||
-          appointment.medic_id === '')
+        (appointment.medic_id === currentMedic.id || !appointment.medic_id)
       );
     });
 
@@ -167,7 +166,7 @@ export default class AppointmentController {
         species,
         breed,
         specialty_id,
-        medic_id: medic_id || '',
+        medic_id: medic_id || null,
         urgent: typeof urgent !== 'boolean' ? false : urgent,
         status,
         created_at: new Date(),
@@ -248,12 +247,17 @@ export default class AppointmentController {
           ? urgentValidation
           : currentAppointment.urgent;
 
+      const medicIdValidation =
+        typeof medic_id === 'undefined' && currentAppointment.medic_id === null
+          ? null
+          : currentAppointment.medic_id;
+
       const updatedAppointment = await Appointments.update({
         id,
         name: name || currentAppointment.name,
         species: species || currentAppointment.species,
         breed: breed || currentAppointment.breed,
-        medic_id: medic_id || currentAppointment.medic_id,
+        medic_id: medicIdValidation,
         specialty_id: specialty_id || currentAppointment.specialty_id,
         urgent: urgentValidation,
         status: status || currentAppointment.status,
