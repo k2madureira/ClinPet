@@ -1,8 +1,20 @@
 import { Request, Response } from 'express';
-import Specialty from '@modules/Specialty/models/Specialty';
-import Medic from '@modules/Medic/models/Medic';
-import Appointment from '../models/Appointment';
+
+import SpecialtyModel from '@modules/Specialty/models/Specialty';
+import SpecialtyFake from '@modules/Specialty/fakes/FakeSpecialty';
+
+import MedicModel from '@modules/Medic/models/Medic';
+import MedicFake from '@modules/Medic/fakes/FakeMedic';
 import IAppointmentDTO from '../dtos/ICreateAppointmentDTO';
+
+import AppointmentModel from '../models/Appointment';
+import AppointmentFake from '../fakes/FakeAppointment';
+
+const Medic = process.env.NODE_ENV === 'test' ? MedicFake : MedicModel;
+const Specialty =
+  process.env.NODE_ENV === 'test' ? SpecialtyFake : SpecialtyModel;
+const Appointment =
+  process.env.NODE_ENV === 'test' ? AppointmentFake : AppointmentModel;
 
 export default class AppointmentController {
   public async index(
@@ -42,7 +54,7 @@ export default class AppointmentController {
         };
       });
 
-      return response.json(appointmentsFormated);
+      return response.json({ appointments: appointmentsFormated });
     } catch (error) {
       return response.status(500).json({ error: 'Error' });
     }
@@ -75,7 +87,7 @@ export default class AppointmentController {
 
     return response
       .status(200)
-      .json(findNextAppointment || { message: 'No pending appointments.' });
+      .json({ appointment: findNextAppointment || [] });
   }
 
   public async findAllMedicAppointment(
@@ -106,7 +118,7 @@ export default class AppointmentController {
 
     return response
       .status(200)
-      .json(findNextAppointment || { message: 'No pending appointments.' });
+      .json({ appointments: findNextAppointment || [] });
   }
 
   public async create(
