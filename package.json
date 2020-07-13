@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "build": "tsc",
+    "build": "babel src --extensions \" .js,.ts\" --out-dir dist --copy-files",
     "start": "node dist/src/shared/server.js",
     "start:ts": "ts-node -r tsconfig-paths/register src/shared/server.ts",
     "dev:server": "ts-node-dev -r tsconfig-paths/register --respawn --transpile-only --ignore-watch node_modules src/shared/server.ts",
@@ -21,12 +21,18 @@
     "uuidv4": "^6.0.7"
   },
   "devDependencies": {
+    "@babel/cli": "^7.10.4",
+    "@babel/core": "^7.10.4",
+    "@babel/node": "^7.10.4",
+    "@babel/preset-env": "^7.10.4",
+    "@babel/preset-typescript": "^7.10.4",
     "@types/cors": "^2.8.6",
     "@types/express": "^4.17.7",
     "@types/jest": "^26.0.4",
     "@types/supertest": "^2.0.10",
     "@typescript-eslint/eslint-plugin": "^2.30.0",
     "@typescript-eslint/parser": "^2.30.0",
+    "babel-plugin-module-resolver": "^4.0.0",
     "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.1.0",
     "eslint-config-prettier": "^6.11.0",
