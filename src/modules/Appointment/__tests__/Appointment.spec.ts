@@ -198,7 +198,7 @@ describe('Appointment', () => {
     expect(appointment.body).toHaveProperty('success');
   });
 
-  it('Should not be able to delete appointment with wrog ID', async () => {
+  it('Should not be able to delete appointment with wrong ID', async () => {
     const appointment = await request(app).delete('/appointment/_WRONG_');
     expect(appointment.body).toHaveProperty('error');
   });

@@ -2,11 +2,11 @@ import request from 'supertest';
 import app from '@shared/app';
 import Specialty from '../models/Specialty';
 
-let specialtyTruncante: Specialty;
+let specialtyTruncate: Specialty;
 
 describe('Specialty', () => {
   beforeEach(() => {
-    specialtyTruncante = new Specialty();
+    specialtyTruncate = new Specialty();
   });
 
   it('Should be able create  a new specialty', async () => {
@@ -14,7 +14,7 @@ describe('Specialty', () => {
       .post('/specialty')
       .send({ description: '_DESCRIPTION_' });
     await request(app).delete(`/specialty/${specialty.body.id}`);
-    await specialtyTruncante.truncate();
+    await specialtyTruncate.truncate();
 
     expect(specialty.body).toHaveProperty('id');
   });
@@ -23,7 +23,7 @@ describe('Specialty', () => {
     const specialty = await request(app)
       .post('/specialty')
       .send({ description: '' });
-    await specialtyTruncante.truncate();
+    await specialtyTruncate.truncate();
     expect(specialty.body).toHaveProperty('error');
   });
 

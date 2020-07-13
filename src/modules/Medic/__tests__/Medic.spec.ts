@@ -46,7 +46,7 @@ describe('Medic', () => {
     expect(medic.body).toHaveProperty('success');
   });
 
-  it('Should not be able to delete medic with wrog ID', async () => {
+  it('Should not be able to delete medic with wrong ID', async () => {
     const medic = await request(app).delete('/medic/_WRONG_');
     expect(medic.body).toHaveProperty('error');
   });
