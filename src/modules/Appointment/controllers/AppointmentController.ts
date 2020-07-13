@@ -146,8 +146,14 @@ export default class AppointmentController {
     response: Response,
   ): Promise<Response<IAppointmentDTO> | Response> {
     try {
+      const medics = new Medic();
       const Appointments = new Appointment();
+      const specialtys = new Specialty();
+
+      const allMedics = await medics.list();
       const appointments = await Appointments.list();
+      const allSpecialtys = await specialtys.list();
+
       const { id } = request.params;
       const {
         name,
@@ -197,7 +203,31 @@ export default class AppointmentController {
         updated_at: new Date(),
       });
 
-      return response.status(200).json(updatedAppointment);
+      const currentMedic = allMedics.find(
+        medic =>
+          medic.id === currentAppointment.medic_id || medic.id === medic_id,
+      );
+      if (currentMedic) {
+        delete currentMedic.specialty_id;
+      }
+
+      const AppointmentResponse = {
+        id: updatedAppointment.id,
+        name: name || currentAppointment.name,
+        species: species || currentAppointment.species,
+        breed: breed || currentAppointment.breed,
+        urgent: updatedAppointment.urgent,
+        status: updatedAppointment.status,
+        medic: {
+          id: currentMedic ? currentMedic.id : '',
+          name: currentMedic ? currentMedic.name : '',
+          specialty: allSpecialtys.find(sp => sp.id === specialty_id),
+        },
+        created_at: updatedAppointment.created_at,
+        updated_at: updatedAppointment.updated_at,
+      };
+
+      return response.status(200).json(AppointmentResponse);
     } catch (error) {
       return response.status(500).json({ error: 'Error' });
     }
