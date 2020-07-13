@@ -50,6 +50,8 @@ export default class Appointment implements IAppointmentRepository {
     medic_id,
     urgent,
     status,
+    created_at,
+    updated_at,
   }: ICreateAppointmentDTO): Promise<ICreateAppointmentDTO> {
     const appointment = {
       id: uuid(),
@@ -58,8 +60,10 @@ export default class Appointment implements IAppointmentRepository {
       breed,
       specialty_id,
       medic_id,
-      urgent: urgent || false,
+      urgent,
       status: status || 'Pendente',
+      created_at,
+      updated_at,
     };
 
     this.appointments.push(appointment);
@@ -68,16 +72,40 @@ export default class Appointment implements IAppointmentRepository {
     return appointment;
   }
 
-  public async update(id: string): Promise<ICreateAppointmentDTO> {
+  public async update({
+    id,
+    name,
+    species,
+    breed,
+    specialty_id,
+    medic_id,
+    urgent,
+    status,
+    created_at,
+    updated_at,
+  }: ICreateAppointmentDTO): Promise<ICreateAppointmentDTO> {
     const Index = this.appointments.findIndex(find => find.id === id);
-    const updatedAppointment = this.appointments[Index];
-    updatedAppointment.status = 'Atendido';
+    // const updatedAppointment = this.appointments[Index];
 
-    this.appointments[Index] = updatedAppointment;
+    const appointment = {
+      id,
+      name,
+      species,
+      breed,
+      specialty_id,
+      medic_id,
+      urgent,
+      status,
+      created_at,
+      updated_at,
+    };
+    // updatedAppointment.status = 'Atendido';
+
+    this.appointments[Index] = appointment;
 
     fs.writeFileSync(this.path, JSON.stringify(this.appointments, null, 2));
 
-    return updatedAppointment;
+    return appointment;
   }
 
   public async delete(id: string): Promise<void> {

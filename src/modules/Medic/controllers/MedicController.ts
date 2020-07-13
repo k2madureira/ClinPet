@@ -144,13 +144,18 @@ export default class MedicController {
       const allAppointments = await appointments.list();
       const allMedics = await medics.list();
       const findMedicIndex = allMedics.findIndex(find => find.id === id);
-      const findAppointmentMedic = allAppointments.find(
-        appointment => appointment.medic_id === id,
-      );
 
       if (findMedicIndex === -1 || !id) {
         return response.status(401).json({ error: 'Medic ID not found!' });
       }
+
+      allAppointments.map(appointment => {
+        if (appointment.medic_id === id) {
+          const currentAppointment = { ...appointment, medic_id: '' };
+          medics.update(currentAppointment);
+        }
+        return appointment;
+      });
 
       await medics.delete(id);
 

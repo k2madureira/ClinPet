@@ -86,18 +86,12 @@ export default class AppointmentController {
         });
       }
 
-      if (!currentMedic) {
-        return response.status(401).json({ error: 'Medic ID not found!' });
-      }
-
       if (!name || !specialty_id || !species) {
         return response.status(401).json({
           error:
             'please fill in the fields [name, specialty_id, species, urgent] ',
         });
       }
-
-      const v = status === 'Atendido';
 
       if (
         status &&
@@ -106,7 +100,7 @@ export default class AppointmentController {
         status !== 'Atendido'
       ) {
         return response.status(401).json({
-          error: `please fill in the field status with [ Atendido ; Pendente ; Cancelado] ${v}`,
+          error: `please fill in the field status with [ Atendido ; Pendente ; Cancelado]`,
         });
       }
 
@@ -115,24 +109,30 @@ export default class AppointmentController {
         species,
         breed,
         specialty_id,
-        medic_id,
-        urgent,
+        medic_id: medic_id || '',
+        urgent: typeof urgent !== 'boolean' ? false : urgent,
         status,
+        created_at: new Date(),
+        updated_at: new Date(),
       });
 
-      delete currentMedic.specialty_id;
+      if (currentMedic) {
+        delete currentMedic.specialty_id;
+      }
+
       const AppointmentResponse = {
         id: newAppointment.id,
         name,
         species,
         breed,
-        urgent,
+        urgent: newAppointment.urgent,
         status: newAppointment.status,
         medic: {
-          id: currentMedic.id,
-          name: currentMedic.name,
+          id: currentMedic ? currentMedic.id : '',
+          name: currentMedic ? currentMedic.name : '',
           specialty: allSpecialtys.find(sp => sp.id === specialty_id),
         },
+        created_at: newAppointment.created_at,
       };
 
       return response.json(AppointmentResponse);
@@ -149,14 +149,53 @@ export default class AppointmentController {
       const Appointments = new Appointment();
       const appointments = await Appointments.list();
       const { id } = request.params;
+      const {
+        name,
+        species,
+        breed,
+        urgent,
+        status,
+        specialty_id,
+        medic_id,
+      } = request.body;
 
-      const findIndex = appointments.findIndex(find => find.id === id);
+      const currentAppointment = appointments.find(
+        appointment => appointment.id === id,
+      );
 
-      if (findIndex === -1 || !id) {
+      if (!currentAppointment) {
         return response.status(401).json({ error: 'Appointment not found!' });
       }
 
-      const updatedAppointment = await Appointments.update(id);
+      if (
+        status &&
+        status !== 'Pendente' &&
+        status !== 'Cancelado' &&
+        status !== 'Atendido'
+      ) {
+        return response.status(401).json({
+          error: `please fill in the field status with [ Atendido ; Pendente ; Cancelado]`,
+        });
+      }
+
+      let urgentValidation = typeof urgent !== 'boolean' ? false : urgent;
+      urgentValidation =
+        typeof urgent !== 'undefined'
+          ? urgentValidation
+          : currentAppointment.urgent;
+
+      const updatedAppointment = await Appointments.update({
+        id,
+        name: name || currentAppointment.name,
+        species: species || currentAppointment.species,
+        breed: breed || currentAppointment.breed,
+        medic_id: medic_id || currentAppointment.medic_id,
+        specialty_id: specialty_id || currentAppointment.specialty_id,
+        urgent: urgentValidation,
+        status: status || currentAppointment.status,
+        created_at: currentAppointment.created_at,
+        updated_at: new Date(),
+      });
 
       return response.status(200).json(updatedAppointment);
     } catch (error) {
