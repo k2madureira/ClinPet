@@ -18,6 +18,7 @@ export default class Medic implements IMedicRepository {
       '..',
       'shared',
       'database',
+      process.env.NODE_ENV === 'test' ? 'fakes' : '',
       'medics.json',
     );
     this.loadJson();
@@ -71,6 +72,13 @@ export default class Medic implements IMedicRepository {
   public async delete(id: string): Promise<void> {
     const MedicIndex = this.medics.findIndex(find => find.id === id);
     this.medics.splice(MedicIndex, 1);
+
+    fs.writeFileSync(this.path, JSON.stringify(this.medics, null, 2));
+  }
+
+  public async truncate(): Promise<void> {
+    const empty = this.medics.splice(0, this.medics.length);
+    this.medics = empty;
 
     fs.writeFileSync(this.path, JSON.stringify(this.medics, null, 2));
   }

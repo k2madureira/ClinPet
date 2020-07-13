@@ -7,7 +7,11 @@
     "build": "tsc",
     "start": "ts-node -r tsconfig-paths/register src/shared/server.ts",
     "dev:server": "ts-node-dev -r tsconfig-paths/register --respawn --transpile-only --ignore-watch node_modules src/shared/server.ts",
-    "test": "jest --clearCache"
+    "test": "jest --no-cache",
+    "test:clean": "jest --clearCache",
+    "test:medic": "jest src/modules/Medic/__tests__/Medic.spec.ts NODE_ENV=test",
+    "test:specialty": "jest src/modules/Specialty/__tests__/Specialty.spec.ts NODE_ENV=test",
+    "test:appointment": "jest src/modules/Appointment/__tests__/Appointment.spec.ts NODE_ENV=test"
   },
   "dependencies": {
     "cors": "^2.8.5",

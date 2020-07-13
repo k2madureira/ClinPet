@@ -9,7 +9,13 @@ export default class Medic implements IMedicRepository {
   path: string;
 
   constructor() {
-    this.medics = [];
+    this.medics = [
+      {
+        id: '_MEDICID_',
+        name: '_NAME_',
+        specialty_id: '_SPECIALTYID_',
+      },
+    ];
   }
 
   public async list(): Promise<ICreateMedicDTO[]> {

@@ -8,7 +8,20 @@ export default class Appointment implements IAppointmentRepository {
   path: string;
 
   constructor() {
-    this.appointments = [];
+    this.appointments = [
+      {
+        id: '_APPOINTMENTID_',
+        name: '_NAME_',
+        species: '_SPECIES_',
+        breed: '_BREED_',
+        medic_id: '_MEDICID_',
+        specialty_id: '_SPECIALTYID_',
+        urgent: false,
+        status: 'Atendido',
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+    ];
   }
 
   public async list(): Promise<ICreateAppointmentDTO[]> {

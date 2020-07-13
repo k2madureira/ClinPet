@@ -3,22 +3,11 @@ import app from '@shared/app';
 
 describe('Medic', () => {
   it('Should be able create  a new medic', async () => {
-    const specialty = await request(app)
-      .post('/specialty')
-      .send({ description: '_DESCRIPTION_' });
-
     const medic = await request(app)
       .post('/medic')
-      .send({ name: '_MEDIC_', specialty_id: specialty.body.id });
-
-    const dm = await request(app).delete(`/medic/${medic.body.id}`);
-    const ds = await request(app).delete(`/specialty/${specialty.body.id}`);
-
-    // console.log(dm.body, ds.body);
+      .send({ name: '_MEDIC_', specialty_id: '_SPECIALTYID_' });
 
     expect(medic.body).toHaveProperty('id');
-    expect(dm.body).toHaveProperty('success');
-    expect(ds.body).toHaveProperty('success');
   });
 
   it('Should not be able to create a new medic, with empty fields', async () => {
@@ -39,9 +28,32 @@ describe('Medic', () => {
     expect(medic.body).toHaveProperty('error');
   });
 
-  it('Should be able to list medics', async () => {
-    const medic = await request(app).get('/medic');
+  it('Should be able to update medic by id', async () => {
+    const medic = await request(app)
+      .put('/medic/_MEDICID_')
+      .send({ name: '_UPDATED_' });
+    expect(medic.body).toHaveProperty('id');
+  });
 
-    expect(medic.body).toHaveProperty('medics');
+  it('Should not be able to update medic by wrong id', async () => {
+    const medic = await request(app)
+      .put('/medic/_WRONG_')
+      .send({ name: '_UPDATED_' });
+    expect(medic.body).toHaveProperty('error');
+  });
+  it('Should be able to delete medic', async () => {
+    const medic = await request(app).delete('/medic/_MEDICID_');
+    expect(medic.body).toHaveProperty('success');
+  });
+
+  it('Should not be able to delete medic with wrog ID', async () => {
+    const medic = await request(app).delete('/medic/_WRONG_');
+    expect(medic.body).toHaveProperty('error');
+  });
+
+  it('Should be able to list medics', async () => {
+    const medics = await request(app).get('/medic');
+
+    expect(medics.body).toHaveProperty('medics');
   });
 });

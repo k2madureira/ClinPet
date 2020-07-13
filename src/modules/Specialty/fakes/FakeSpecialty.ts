@@ -1,6 +1,5 @@
 import { uuid } from 'uuidv4';
-import { resolve } from 'path';
-import fs from 'fs';
+
 import ICreateSpecialtyDTO from '../dtos/ICreateSpecialtyDTO';
 
 export default class Specialty {
@@ -9,23 +8,12 @@ export default class Specialty {
   path: string;
 
   constructor() {
-    this.specialtys = [];
-    this.path = resolve(
-      __dirname,
-      '..',
-      '..',
-      '..',
-      'shared',
-      'database',
-      process.env.NODE_ENV === 'test' ? 'fakes' : '',
-      'specialtys.json',
-    );
-    this.loadJson();
-  }
-
-  loadJson(): void {
-    const data = fs.readFileSync(this.path);
-    this.specialtys = JSON.parse(data.toString());
+    this.specialtys = [
+      {
+        id: '_SPECIALTYID_',
+        description: '_REPEAT_',
+      },
+    ];
   }
 
   public async list(): Promise<ICreateSpecialtyDTO[]> {
@@ -41,7 +29,6 @@ export default class Specialty {
     };
 
     this.specialtys.push(specialty);
-    fs.writeFileSync(this.path, JSON.stringify(this.specialtys, null, 2));
 
     return specialty;
   }
@@ -49,14 +36,10 @@ export default class Specialty {
   public async delete(id: string): Promise<void> {
     const SpecialtyIndex = this.specialtys.findIndex(find => find.id === id);
     this.specialtys.splice(SpecialtyIndex, 1);
-
-    fs.writeFileSync(this.path, JSON.stringify(this.specialtys, null, 2));
   }
 
   public async truncate(): Promise<void> {
     const empty = this.specialtys.splice(0, this.specialtys.length);
     this.specialtys = empty;
-
-    fs.writeFileSync(this.path, JSON.stringify(this.specialtys, null, 2));
   }
 }

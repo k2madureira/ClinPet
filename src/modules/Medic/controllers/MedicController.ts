@@ -1,8 +1,20 @@
 import { Request, Response } from 'express';
-import Specialty from '@modules/Specialty/models/Specialty';
-import Appointment from '@modules/Appointment/models/Appointment';
-import Medic from '../models/Medic';
+import SpecialtyModel from '@modules/Specialty/models/Specialty';
+import SpecialtyFake from '@modules/Specialty/fakes/FakeSpecialty';
+
+import AppointmentModel from '@modules/Appointment/models/Appointment';
+import AppointmentFake from '@modules/Appointment/fakes/FakeAppointment';
+
+import MedicModel from '../models/Medic';
+import MedicFake from '../fakes/FakeMedic';
+
 import ICreateMedicDTO from '../dtos/ICreateMedicDTO';
+
+const Medic = process.env.NODE_ENV === 'test' ? MedicFake : MedicModel;
+const Specialty =
+  process.env.NODE_ENV === 'test' ? SpecialtyFake : SpecialtyModel;
+const Appointment =
+  process.env.NODE_ENV === 'test' ? AppointmentFake : AppointmentModel;
 
 export default class MedicController {
   public async index(
@@ -143,9 +155,9 @@ export default class MedicController {
 
       const allAppointments = await appointments.list();
       const allMedics = await medics.list();
-      const findMedicIndex = allMedics.findIndex(find => find.id === id);
+      const currentMedic = allMedics.find(medic => medic.id === id);
 
-      if (findMedicIndex === -1 || !id) {
+      if (!currentMedic) {
         return response.status(401).json({ error: 'Medic ID not found!' });
       }
 

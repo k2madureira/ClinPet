@@ -1,6 +1,11 @@
 import { Request, Response } from 'express';
-import Specialty from '@modules/Specialty/models/Specialty';
+
+import SpecialtyModel from '@modules/Specialty/models/Specialty';
+import SpecialtyFake from '@modules/Specialty/fakes/FakeSpecialty';
 import ICreateSpecialtyDTO from '../dtos/ICreateSpecialtyDTO';
+
+const Specialty =
+  process.env.NODE_ENV === 'test' ? SpecialtyFake : SpecialtyModel;
 
 export default class SpecialtyController {
   public async index(

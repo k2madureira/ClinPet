@@ -1,12 +1,20 @@
 import request from 'supertest';
 import app from '@shared/app';
+import Specialty from '../models/Specialty';
+
+let specialtyTruncante: Specialty;
 
 describe('Specialty', () => {
+  beforeEach(() => {
+    specialtyTruncante = new Specialty();
+  });
+
   it('Should be able create  a new specialty', async () => {
     const specialty = await request(app)
       .post('/specialty')
       .send({ description: '_DESCRIPTION_' });
     await request(app).delete(`/specialty/${specialty.body.id}`);
+    await specialtyTruncante.truncate();
 
     expect(specialty.body).toHaveProperty('id');
   });
@@ -15,32 +23,26 @@ describe('Specialty', () => {
     const specialty = await request(app)
       .post('/specialty')
       .send({ description: '' });
-
+    await specialtyTruncante.truncate();
     expect(specialty.body).toHaveProperty('error');
   });
 
-  it('Should not be able to create a duplicate specialty', async () => {
-    const specialty_1 = await request(app)
-      .post('/specialty')
-      .send({ description: '_DESCRIPTION_' });
+  it('Should be able to delete a specialty', async () => {
+    const specialty_2 = await request(app).delete('/specialty/_SPECIALTYID_');
+    expect(specialty_2.body).toHaveProperty('success');
+  });
 
+  it('Should not be able to create a duplicate specialty', async () => {
     const specialty_2 = await request(app)
       .post('/specialty')
-      .send({ description: '_DESCRIPTION_' });
-
-    await request(app).delete(`/specialty/${specialty_1.body.id}`);
-    await request(app).delete(`/specialty/${specialty_2.body.id}`);
+      .send({ description: '_DESCRIPTION_' })
+      .send({ description: '_REPEAT_' });
 
     expect(specialty_2.body).toHaveProperty('error');
   });
 
   it('Should  be able to list specialtys', async () => {
-    const specialty = await request(app)
-      .post('/specialty')
-      .send({ description: '_DESCRIPTION_' });
-
     const specialtys = await request(app).get('/specialty');
-    await request(app).delete(`/specialty/${specialty.body.id}`);
 
     expect(specialtys.body).toHaveProperty('specialtys');
   });
