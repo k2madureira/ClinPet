@@ -31,7 +31,7 @@
                  |_ fakes
                  |_ models
                  |_ repositories
-                        
+
             |_ Specialty
                  |_ __tests__
                  |_ controllers
@@ -54,7 +54,7 @@
 ### Docs:
 
 1. PostMan ( https://documenter.getpostman.com/view/9357385/SzKZsbor )
-2. PostMan Collection ( public/postman/Clinic.postman_collection.json ) 
+2. PostMan Collection ( public/postman/Clinic.postman_collection.json )
 3. docs
 4. Code Coverage ( ClinPet/public/coverage/lcov-report/index.html )
 5. Insominia.json
@@ -62,7 +62,7 @@
 ### Setting up local environment:
 
 1. Install **Yarn**;
-2. Using terminal, navigate to the folder where the project was cloned and run:<br> **git clone https://github.com/k2madureira/ClinPet.git** 
+2. Using terminal, navigate to the folder where the project was cloned and run:<br> **git clone https://github.com/k2madureira/ClinPet.git**
 3. Using terminal, access the **ClinPet** folder and Run **yarn install**, to download all necessary dependencies;
 4. Using terminal run **yarn start**, to start the server on port **3333**;
 5. For testing, the **insomnia** software is recommended;
@@ -92,7 +92,7 @@
 |6| *Post* | /appointment | Create an appointment |
 |7| *Put* | /appointment/**:id** | Update an appointment using **id** |
 |8| *Delete* | /appointment/**:id** | Delete an appointment using **id** |
-|9| *Get* | /appointment | List all appointments |
+|9| *Get* | /appointment *or* / | List all appointments |
 |10| *Get* | /appointment/medic/**:id**/all | List all appointments for an medic using **id** |
 |11| *Get* | /appointment/medic/**:id** | Next appointment for an medic using **id** |
 
@@ -101,215 +101,290 @@
 #### Exemples:
 
 
-1. http://localhost:3334/ or http://localhost:3334/rules **(get)**
+1. http://localhost:3333/specialty **(POST)**
 
-##### Response
+##### Request [ body: JSON]
+```
+{
+	"description": "Nutricionista"
+}
+```
+
+##### Response [JSON]
 
 ```
-[{
-  "id": 1,
-  "type": "daily",
-  "date": null,
-  "days": [],
-  "hours": [
-     {
-     "start": "08:00",
-     "end": "10:05"
-     }
-  }]
+{
+  "id": "ccf1167d-df15-4281-a68c-3830626b98df",
+  "description": "Nutricionista"
+}
  ```
 
  ------------------------------------------------------------
 
-  2. http://localhost:3334/rules/daily **(post)**
-
- #### Conditions :
- * If **days** is empty and **date** is filled it is considered a specific rule. That is, registration of a specific day;
- * If **days** and **date** is empty, is considered a daily rule;
- * If **date** empty, is considered a weekly rule;
- * If a specific day has already been registered. A time check is performed for the addition of a new time.
+2. http://localhost:3333/specialty **(GET)**
 
 
- ##### req.query
+##### Response [JSON]
 
 ```
-	http://localhost:3334/rules/daily
-	type: daily
-	types = ['specific', 'daily', 'weekly']
-
- ```
-
-
-
- ##### Exemples req.body (JSON)
-
- 1. Daily
-```
-     {
-	"days": [],
-	"date_start": "2020-03-05 13:00:00",
-	"date_end": "2020-03-05 14:05:00"
-     }
- ```
-
-2. Weekly
-```
-     {
-	"days": ["Sun","Mon"],
-	"date_start": "2020-03-05 09:00:00",
-	"date_end": "2020-03-05 10:00:00"
-     }
- ```
-
- 3. Specific
-```
-     {
-	"days": [],
-	"date_start": "2020-03-05 17:00:00",
-	"date_end": "2020-03-05 18:00:00"
-     }
- ```
-
-##### Responses
-
-1. Daily
-```
-   {
-  	"menssage": "Successfully updated rule!",
-	"update":
-            [{
-	      "id": 1,
-	      "type": "daily",
-	      "date": null,
-	      "days": [],
-	      "hours": [
-		{
-		  "start": "13:00",
-		  "end": "14:05"
-	    }]
+{
+  "specialtys": [
+    {
+      "id": "ccf1167d-df15-4281-a68c-3830626b98df",
+      "description": "Nutricionista"
     }
- ```
- 2. Weekly
-```
-   {
-  	"menssage": "Successfully updated rule!",
-	"update":
-            [{
-	      "id": 2,
-	      "type": "Weekly",
-	      "date": null,
-	      "days": ["Sun", "Mon"],
-	      "hours": [
-		{
-		  "start": "09:00",
-		  "end": "10:00"
-	    }]
-    }
+  ]
+}
  ```
 
- 3. Specific
+ ------------------------------------------------------------
+
+3. http://localhost:3333/medic **(POST)**
+
+##### Request [ body: JSON]
 ```
-   {
-  	"menssage": "Successfully updated rule!",
-	"update":
-            [{
-	      "id": 1,
-	      "type": "daily",
-	      "date": "2020-03-05",
-	      "days": [],
-	      "hours": [
-		{
-		  "start": "12:40",
-		  "end": "13:20"
-	        },
-		{
-		  "start": "17:00",
-		  "end": "18:00"
-	        }
-	    ]
-    }
- ```
+{
+	"name": "EXAMPLE",
+  "specialty_id":"ccf1167d-df15-4281-a68c-3830626b98df"
+}
+```
 
- ------------------------------------------------------
-
-
-  3. http://localhost:3334/period **(post)**
-
- * This route receives two dates for the verification of the rules registered for the chosen days.
-
-
-#####  req.body (JSON)
+##### Response [JSON]
 
 ```
-   {
-	"since":"2019-11-01",
-	"until":"2019-11-13"
-   }
- ```
-
-
-##### Response
-
-```
-[
-  {
-    "id": 2,
-    "type": "specific",
-    "date": "01-11-2019",
-    "days": [],
-    "hours": [
-      {
-        "start": "14:20",
-        "end": "15:05"
-      },
-      {
-        "start": "08:20",
-        "end": "10:05"
-      }
-    ]
-  },
-  {
-    "id": 4,
-    "type": "specific",
-    "date": "10-11-2019",
-    "days": [],
-    "hours": [
-      {
-        "start": "08:20",
-        "end": "10:05"
-      }
-    ]
-  },
-  {
-    "id": 5,
-    "type": "specific",
-    "date": "09-11-2019",
-    "days": [],
-    "hours": [
-      {
-        "start": "08:20",
-        "end": "10:05"
-      }
-    ]
+{
+  "id": "94babbaa-2a7e-4874-815b-5ded5b5269f0",
+  "name": "EXAMPLE",
+  "specialty": {
+    "id": "ccf1167d-df15-4281-a68c-3830626b98df",
+    "description": "Nutricionista"
   }
-]
+}
  ```
 
+ ------------------------------------------------------------
 
- 4. http://localhost:3334/rules/5 **(delete)**
 
-##### Res
+4. http://localhost:3333/medic/94babbaa-2a7e-4874-815b-5ded5b5269f0 **(PUT)**
+
+**Fields [name, specialty_id] optional**
+
+##### Request [ body: JSON]
+```
+{
+	"name": "EXAMPLE UPDATED"
+}
+```
+
+##### Response [JSON]
 
 ```
-	true
-
+{
+  "id": "94babbaa-2a7e-4874-815b-5ded5b5269f0",
+  "name": "EXAMPLE UPDATED",
+  "specialty": {
+    "id": "ccf1167d-df15-4281-a68c-3830626b98df",
+    "description": "Nutricionista"
+  }
+}
  ```
 
-##### req.query
+ ------------------------------------------------------------
+
+ 5. http://localhost:3333/medic/94babbaa-2a7e-4874-815b-5ded5b5269f0 **(DELETE)**
+
+**Fields [name, specialty_id] optional**
+
+
+##### Response [JSON]
 
 ```
-	http://localhost:3334/rules/5
-	"id": 5
-
+{
+  "success": "deleted"
+}
  ```
 
+ ------------------------------------------------------------
+
+ 6. http://localhost:3333/appointment **(POST)**
+
+**Fields [name, specialty_id, species] is not optional**
+##### Request [ body: JSON]
+```
+{
+	"name": "Jhon",
+  "species": "Dog",
+  "breed": "",
+  "urgent": false,
+	"medic_id":"94babbaa-2a7e-4874-815b-5ded5b5269f0",
+  "specialty_id": "ccf1167d-df15-4281-a68c-3830626b98df"
+}
+```
+
+##### Response [JSON]
+
+```
+{
+  "id": "c269eae4-443a-4e40-bd83-bd0426e26274",
+  "name": "Jhon",
+  "species": "Dog",
+  "breed": "",
+  "urgent": false,
+  "status": "Pendente",
+  "medic": {
+    "id": "94babbaa-2a7e-4874-815b-5ded5b5269f0",
+    "name": "EXAMPLE UPDATED",
+    "specialty": {
+      "id": "ccf1167d-df15-4281-a68c-3830626b98df",
+      "description": "Nutricionista"
+    }
+  },
+  "created_at": "2020-07-13T22:23:27.729Z"
+}
+ ```
+
+ ------------------------------------------------------------
+
+ 7. http://localhost:3333/appointment/c269eae4-443a-4e40-bd83-bd0426e26274 **(PUT)**
+
+**If [status === "Atendido"], this appointment gonna be deleted**
+##### Request [ body: JSON]
+```
+{
+	"name": "Jony",
+	"urgent": false,
+	"status": "Pendente"
+}
+```
+
+##### Response [JSON]
+
+```
+{
+  "id": "c269eae4-443a-4e40-bd83-bd0426e26274",
+  "name": "Jony",
+  "species": "Dog",
+  "breed": "",
+  "urgent": false,
+  "status": "Pendente",
+  "medic": {
+    "id": "94babbaa-2a7e-4874-815b-5ded5b5269f0",
+    "name": "EXAMPLE UPDATED"
+  },
+  "created_at": "2020-07-13T22:23:27.729Z",
+  "updated_at": "2020-07-13T22:27:04.165Z"
+}
+ ```
+
+ ------------------------------------------------------------
+
+  8. http://localhost:3333/appointment/94babbaa-2a7e-4874-815b-5ded5b5269f0 **(DELETE)**
+
+
+##### Response [JSON]
+
+```
+{
+  "success": "deleted"
+}
+ ```
+
+ ------------------------------------------------------------
+
+ 9. http://localhost:3333/appointment **(GET)**
+
+
+##### Response [JSON]
+
+```
+{
+  "appointments": [
+    {
+      "id": "c269eae4-443a-4e40-bd83-bd0426e26274",
+      "name": "Jony",
+      "species": "Dog",
+      "breed": "",
+      "urgent": false,
+      "status": "Pendente",
+      "medic": {
+        "id": "94babbaa-2a7e-4874-815b-5ded5b5269f0",
+        "name": "EXAMPLE UPDATED",
+        "specialty": {
+          "id": "ccf1167d-df15-4281-a68c-3830626b98df",
+          "description": "Nutricionista"
+        }
+      },
+      "created_at": "2020-07-13T22:23:27.729Z",
+      "updated_at": "2020-07-13T22:27:04.165Z"
+    }
+  ]
+}
+ ```
+
+ ------------------------------------------------------------
+
+ 10. http://localhost:3333/appointment/medic/94babbaa-2a7e-4874-815b-5ded5b5269f0/all **(GET)**
+
+
+##### Response [JSON]
+
+```
+{
+  "appointments": [
+    {
+      "id": "c269eae4-443a-4e40-bd83-bd0426e26274",
+      "name": "Jony",
+      "species": "Dog",
+      "breed": "",
+      "urgent": false,
+      "status": "Pendente",
+      "medic": {
+        "id": "94babbaa-2a7e-4874-815b-5ded5b5269f0",
+        "name": "EXAMPLE UPDATED",
+        "specialty": {
+          "id": "ccf1167d-df15-4281-a68c-3830626b98df",
+          "description": "Nutricionista"
+        }
+      },
+      "created_at": "2020-07-13T22:23:27.729Z",
+      "updated_at": "2020-07-13T22:27:04.165Z"
+    }
+  ]
+}
+ ```
+
+ ------------------------------------------------------------
+
+
+ 11. http://localhost:3333/appointment/medic/94babbaa-2a7e-4874-815b-5ded5b5269f0 **(GET)**
+
+**Seeks the doctor's next appointment, evaluating the required specialty, urgency and the status of the animals**
+
+##### Response [JSON]
+
+```
+{
+  "appointments": [
+    {
+      "id": "c269eae4-443a-4e40-bd83-bd0426e26274",
+      "name": "Jony",
+      "species": "Dog",
+      "breed": "",
+      "urgent": false,
+      "status": "Pendente",
+      "medic": {
+        "id": "94babbaa-2a7e-4874-815b-5ded5b5269f0",
+        "name": "EXAMPLE UPDATED",
+        "specialty": {
+          "id": "ccf1167d-df15-4281-a68c-3830626b98df",
+          "description": "Nutricionista"
+        }
+      },
+      "created_at": "2020-07-13T22:23:27.729Z",
+      "updated_at": "2020-07-13T22:27:04.165Z"
+    }
+  ]
+}
+ ```
+
+ ------------------------------------------------------------
