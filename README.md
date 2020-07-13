@@ -84,11 +84,17 @@
 
 |Number| Type | Route | Definition |
 |-|------|-------|------------|
-|1| *Get* | / | List All rules |
-|1.1| *Get* | /rules | List All rules |
-|2| *Post* | /rules/type | Create a new Rule |
-|3| *Get* | /rules/period | List All rules in a period |
-|4| *Delete* | /rules/5 | Delete rule by **ID** |
+|1| *Post* | /specialty | Create an specialty |
+|2| *Get* | /specialty | List all specialties |
+|3| *Post* | /medic | Register new medic |
+|4| *Put* | /medic/**:id** | Update an medic using **id** |
+|5| *Delete* | /medic/**:id** | Delete an medic using **id** |
+|6| *Post* | /appointment | Create an appointment |
+|7| *Put* | /appointment/**:id** | Update an appointment using **id** |
+|8| *Delete* | /appointment/**:id** | Delete an appointment using **id** |
+|9| *Get* | /appointment | List all appointments |
+|10| *Get* | /appointment/medic/**:id**/all | List all appointments for an medic using **id** |
+|11| *Get* | /appointment/medic/**:id** | Next appointment for an medic using **id** |
 
 
 
