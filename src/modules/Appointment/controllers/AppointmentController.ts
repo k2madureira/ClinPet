@@ -11,10 +11,38 @@ export default class AppointmentController {
   ): Promise<Response<IAppointmentDTO[]>> {
     try {
       const Appointments = new Appointment();
+      const medics = new Medic();
+      const specialtys = new Specialty();
 
+      const allSpecialtys = await specialtys.list();
+      const allMedics = await medics.list();
       const appointments = await Appointments.list();
 
-      return response.json(appointments);
+      const appointmentsFormated = appointments.map(appointment => {
+        const currentMedic = allMedics.find(
+          medic => medic.id === appointment.medic_id,
+        );
+
+        return {
+          id: appointment.id,
+          name: appointment.name,
+          species: appointment.species,
+          breed: appointment.breed,
+          urgent: appointment.urgent,
+          status: appointment.status,
+          medic: {
+            id: currentMedic ? currentMedic.id : '',
+            name: currentMedic ? currentMedic.name : '',
+            specialty: allSpecialtys.find(
+              sp => sp.id === appointment.specialty_id,
+            ),
+          },
+          created_at: appointment.created_at,
+          updated_at: appointment.updated_at,
+        };
+      });
+
+      return response.json(appointmentsFormated);
     } catch (error) {
       return response.status(500).json({ error: 'Error' });
     }
