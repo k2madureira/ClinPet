@@ -8,9 +8,9 @@ exports.default = void 0;
 var _uuidv = require("uuidv4");
 
 class Specialty {
-  specialtys = [];
-
   constructor() {
+    this.specialtys = [];
+    this.path = void 0;
     this.specialtys = [{
       id: '_SPECIALTYID_',
       description: '_REPEAT_'

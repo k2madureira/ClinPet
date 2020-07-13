@@ -14,9 +14,9 @@ var _fs = _interopRequireDefault(require("fs"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 class Appointment {
-  appointments = [];
-
   constructor() {
+    this.appointments = [];
+    this.path = void 0;
     this.appointments = [];
     this.path = (0, _path.resolve)(__dirname, '..', '..', '..', 'shared', 'database', 'appointments.json');
     this.loadJson();

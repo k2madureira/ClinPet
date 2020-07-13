@@ -14,9 +14,9 @@ var _fs = _interopRequireDefault(require("fs"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 class Medic {
-  medics = [];
-
   constructor() {
+    this.medics = [];
+    this.path = void 0;
     this.medics = [];
     this.path = (0, _path.resolve)(__dirname, '..', '..', '..', 'shared', 'database', process.env.NODE_ENV === 'test' ? 'fakes' : '', 'medics.json');
     this.loadJson();

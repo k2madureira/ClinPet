@@ -8,9 +8,9 @@ exports.default = void 0;
 var _uuidv = require("uuidv4");
 
 class Medic {
-  medics = [];
-
   constructor() {
+    this.medics = [];
+    this.path = void 0;
     this.medics = [{
       id: '_MEDICID_',
       name: '_NAME_',

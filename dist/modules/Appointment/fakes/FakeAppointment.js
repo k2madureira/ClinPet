@@ -8,9 +8,9 @@ exports.default = void 0;
 var _uuidv = require("uuidv4");
 
 class Appointment {
-  appointments = [];
-
   constructor() {
+    this.appointments = [];
+    this.path = void 0;
     this.appointments = [{
       id: '_APPOINTMENTID_',
       name: '_NAME_',

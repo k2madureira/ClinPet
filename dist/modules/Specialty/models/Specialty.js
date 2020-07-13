@@ -14,9 +14,9 @@ var _fs = _interopRequireDefault(require("fs"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 class Specialty {
-  specialtys = [];
-
   constructor() {
+    this.specialtys = [];
+    this.path = void 0;
     this.specialtys = [];
     this.path = (0, _path.resolve)(__dirname, '..', '..', '..', 'shared', 'database', process.env.NODE_ENV === 'test' ? 'fakes' : '', 'specialtys.json');
     this.loadJson();
