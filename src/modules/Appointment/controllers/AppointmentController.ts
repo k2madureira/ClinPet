@@ -239,13 +239,23 @@ export default class AppointmentController {
         delete currentMedic.specialty_id;
       }
 
+      const deleteAppointment =
+        updatedAppointment.status === 'Atendido'
+          ? await Appointments.delete(id)
+          : false;
+
+      console.log(deleteAppointment);
+
       const AppointmentResponse = {
         id: updatedAppointment.id,
         name: name || currentAppointment.name,
         species: species || currentAppointment.species,
         breed: breed || currentAppointment.breed,
         urgent: updatedAppointment.urgent,
-        status: updatedAppointment.status,
+        status:
+          typeof deleteAppointment !== 'undefined'
+            ? updatedAppointment.status
+            : 'Atendido ( Appointment Deleted ❌)',
         medic: {
           id: currentMedic ? currentMedic.id : '',
           name: currentMedic ? currentMedic.name : '',

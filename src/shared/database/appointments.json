@@ -22,17 +22,5 @@
     "status": "Pendente",
     "created_at": "2020-07-13T00:10:03.687Z",
     "updated_at": "2020-07-13T00:32:01.552Z"
-  },
-  {
-    "id": "b5f8303f-3ba9-4969-8d47-9479085ae84d",
-    "name": "Jony",
-    "species": "Dog",
-    "breed": "siames",
-    "specialty_id": "b155b43c-3238-4f92-b17f-7889c0c42896",
-    "medic_id": "70aac942-c6ac-4c6e-8879-c58024d2481a",
-    "urgent": false,
-    "status": "Cancelado",
-    "created_at": "2020-07-13T00:32:47.183Z",
-    "updated_at": "2020-07-13T00:40:22.681Z"
   }
 ]
