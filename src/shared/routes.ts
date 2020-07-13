@@ -15,6 +15,10 @@ routes.delete('/medic/:id', medicController.delete);
 
 routes.get('/appointment', appointmetController.index);
 routes.get('/appointment/medic/:id', appointmetController.findMedicAppointment);
+routes.get(
+  '/appointment/medic/:id/all',
+  appointmetController.findAllMedicAppointment,
+);
 
 routes.post('/appointment', appointmetController.create);
 routes.put('/appointment/:id', appointmetController.update);

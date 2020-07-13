@@ -57,21 +57,51 @@ export default class AppointmentController {
     const Medics = new Medic();
 
     const appointments = await Appointments.list();
-    const medics = await Medics.list();
+    const allMedics = await Medics.list();
 
-    const findMedicIndex = medics.findIndex(find => find.id === id);
+    const currentMedic = allMedics.find(medic => medic.id === id);
 
-    if (findMedicIndex === -1 || !id) {
+    if (!currentMedic) {
       return response.status(401).json({ error: 'Medic ID not found!' });
     }
-
-    const medic = medics[findMedicIndex];
 
     const findNextAppointment = appointments.find(appointment => {
       return (
         appointment.status !== 'Atendido' &&
         appointment.status !== 'Cancelado' &&
-        appointment.specialty_id === medic.specialty_id
+        (appointment.medic_id === currentMedic.id ||
+          appointment.medic_id === '')
+      );
+    });
+
+    return response
+      .status(200)
+      .json(findNextAppointment || { message: 'No pending appointments.' });
+  }
+
+  public async findAllMedicAppointment(
+    request: Request,
+    response: Response,
+  ): Promise<Response<IAppointmentDTO>> {
+    const { id } = request.params;
+    const Appointments = new Appointment();
+    const Medics = new Medic();
+
+    const appointments = await Appointments.list();
+    const allMedics = await Medics.list();
+
+    const currentMedic = allMedics.find(medic => medic.id === id);
+
+    if (!currentMedic) {
+      return response.status(401).json({ error: 'Medic ID not found!' });
+    }
+
+    const findNextAppointment = appointments.filter(appointment => {
+      return (
+        appointment.status !== 'Atendido' &&
+        appointment.status !== 'Cancelado' &&
+        (appointment.medic_id === currentMedic.id ||
+          appointment.medic_id === '')
       );
     });
 
@@ -243,8 +273,6 @@ export default class AppointmentController {
         updatedAppointment.status === 'Atendido'
           ? await Appointments.delete(id)
           : false;
-
-      console.log(deleteAppointment);
 
       const AppointmentResponse = {
         id: updatedAppointment.id,
