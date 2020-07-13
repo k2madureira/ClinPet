@@ -1,0 +1,1 @@
+web:node src/shared/server.js
