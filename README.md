@@ -8,7 +8,7 @@
   clinic
     |_ public
         |_ coverage
-        |_ postman
+        |_ Postman
     |_ src
         |_ modules
             |_ Appointment
@@ -53,11 +53,13 @@
 
 ### Docs:
 
-1. PostMan ( https://documenter.getpostman.com/view/9357385/SzKZsbor )
-2. PostMan Collection ( public/postman/Clinic.postman_collection.json )
+1. PostMan ( https://documenter.getpostman.com/view/9357385/T17Nc5KC )
+2. PostMan Collection ( public/Postman/ClinPet.postman_collection.json )
 3. docs
 4. Code Coverage ( ClinPet/public/coverage/lcov-report/index.html )
 5. Insominia.json
+
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/2f774259b17c79834391)
 
 ### Setting up local environment:
 
