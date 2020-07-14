@@ -51,7 +51,7 @@
               |_> server.ts
 ```
 
-### Data schema:
+### Data schema files JSON:
 ```
    _____________      _____________     ____________________  
   | Specialtys  |    |   Medics    |   |    Appointments    |
