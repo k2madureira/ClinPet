@@ -62,6 +62,43 @@ class SpecialtyController {
     }
   }
 
+  async update(request, response) {
+    try {
+      const {
+        description
+      } = request.body;
+      const {
+        id
+      } = request.params;
+
+      if (!description) {
+        return response.status(401).json({
+          error: 'please fill in the field [description] '
+        });
+      }
+
+      const Specialties = new Specialty();
+      const AllSpecialtys = await Specialties.list();
+      const findSpecialty = AllSpecialtys.find(specialty => specialty.id === id);
+
+      if (!findSpecialty && id) {
+        return response.status(401).json({
+          error: 'Specialty ID not found!'
+        });
+      }
+
+      const UpdatedSpecialty = await Specialties.update({
+        id,
+        description: description || (findSpecialty === null || findSpecialty === void 0 ? void 0 : findSpecialty.description)
+      });
+      return response.status(200).json(UpdatedSpecialty);
+    } catch (error) {
+      return response.status(500).json({
+        error: 'Error'
+      });
+    }
+  }
+
   async delete(request, response) {
     try {
       const {

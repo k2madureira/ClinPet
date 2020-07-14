@@ -20,6 +20,24 @@ describe('Specialty', () => {
     });
     expect(specialty.body).toHaveProperty('error');
   });
+  it('Should be able to update an specialty, with description', async () => {
+    const specialty = await (0, _supertest.default)(_app.default).put('/specialty/_SPECIALTYID_').send({
+      description: '_UPDATED_'
+    });
+    expect(specialty.body).toHaveProperty('id');
+  });
+  it('Should not be able to update an specialty, without description', async () => {
+    const specialty = await (0, _supertest.default)(_app.default).put('/specialty/_SPECIALTYID_').send({
+      description: ''
+    });
+    expect(specialty.body).toHaveProperty('error');
+  });
+  it('Should not be able to update an specialty, with wrong ID', async () => {
+    const specialty = await (0, _supertest.default)(_app.default).put('/specialty/_WRONG_').send({
+      description: ''
+    });
+    expect(specialty.body).toHaveProperty('error');
+  });
   it('Should be able to delete a specialty', async () => {
     const specialty_2 = await (0, _supertest.default)(_app.default).delete('/specialty/_SPECIALTYID_');
     expect(specialty_2.body).toHaveProperty('success');

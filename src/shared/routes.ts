@@ -31,6 +31,7 @@ routes.delete('/appointment/:id', appointmentController.delete);
 
 routes.get('/specialty', specialtyController.index);
 routes.post('/specialty', specialtyController.create);
+routes.put('/specialty/:id', specialtyController.update);
 routes.delete('/specialty/:id', specialtyController.delete);
 
 export default routes;

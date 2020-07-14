@@ -46,6 +46,22 @@ class Specialty {
     return specialty;
   }
 
+  async update({
+    id,
+    description
+  }) {
+    const findSpecialtyIndex = this.specialtys.findIndex(find => find.id === id);
+    const specialty = {
+      id,
+      description
+    };
+    this.specialtys[findSpecialtyIndex] = specialty;
+
+    _fs.default.writeFileSync(this.path, JSON.stringify(this.specialtys, null, 2));
+
+    return specialty;
+  }
+
   async delete(id) {
     const SpecialtyIndex = this.specialtys.findIndex(find => find.id === id);
     this.specialtys.splice(SpecialtyIndex, 1);

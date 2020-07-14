@@ -46,6 +46,25 @@ export default class Specialty {
     return specialty;
   }
 
+  public async update({
+    id,
+    description,
+  }: ICreateSpecialtyDTO): Promise<ICreateSpecialtyDTO> {
+    const findSpecialtyIndex = this.specialtys.findIndex(
+      find => find.id === id,
+    );
+
+    const specialty = {
+      id,
+      description,
+    };
+
+    this.specialtys[findSpecialtyIndex] = specialty;
+    fs.writeFileSync(this.path, JSON.stringify(this.specialtys, null, 2));
+
+    return specialty;
+  }
+
   public async delete(id: string): Promise<void> {
     const SpecialtyIndex = this.specialtys.findIndex(find => find.id === id);
     this.specialtys.splice(SpecialtyIndex, 1);

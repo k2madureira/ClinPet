@@ -32,6 +32,19 @@ class Specialty {
     return specialty;
   }
 
+  async update({
+    id,
+    description
+  }) {
+    const findSpecialtyIndex = this.specialtys.findIndex(find => find.id === id);
+    const specialty = {
+      id,
+      description
+    };
+    this.specialtys[findSpecialtyIndex] = specialty;
+    return specialty;
+  }
+
   async delete(id) {
     const SpecialtyIndex = this.specialtys.findIndex(find => find.id === id);
     this.specialtys.splice(SpecialtyIndex, 1);
