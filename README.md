@@ -85,7 +85,7 @@
 1. Install **Yarn**;
 2. Using terminal, navigate to the folder where the project was cloned and run:<br> **git clone https://github.com/k2madureira/ClinPet.git**
 3. Using terminal, access the **ClinPet** folder and Run **yarn install**, to download all necessary dependencies;
-4. Using terminal run **yarn start**, to start the server on port **3333**;
+4. Using terminal run **yarn dev:server**, to start the server on port **3333**;
 5. For testing, the **insomnia** software is recommended;
 6. To perform the unit test **yarn test**
 
