@@ -51,6 +51,25 @@
               |_> server.ts
 ```
 
+### Data schema:
+```
+   _____________      _____________     ____________________  
+  | Specialtys  |    |   Medics    |   |    Appointments    |
+  |_____________|    |------------ |   |--------------------|
+  |     id _____|_   |    id       |   |        id          |
+  | description | |__|_specialty_id|   |       name         |
+  |_____________| |  |_____________|   |      species       |
+                  |                    |       breed        |
+                  |                    |       urgent       |
+                  |                    |       status       |
+                  |                    |       medic_id     |
+                  |____________________|_____specialty_id   |
+                                       |     created_at     |
+                                       |     updated_at     |
+                                       |____________________|
+  
+```
+
 ### Docs:
 
 1. PostMan ( https://documenter.getpostman.com/view/9357385/T17Nc5KC )
