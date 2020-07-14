@@ -106,16 +106,17 @@
 |Number| Type | Route | Definition |
 |-|------|-------|------------|
 |1| *Post* | /specialty | Create an specialty |
-|2| *Get* | /specialty | List all specialties |
-|3| *Post* | /medic | Register new medic |
-|4| *Put* | /medic/**:id** | Update an medic using **id** |
-|5| *Delete* | /medic/**:id** | Delete an medic using **id** |
-|6| *Post* | /appointment | Create an appointment |
-|7| *Put* | /appointment/**:id** | Update an appointment using **id** |
-|8| *Delete* | /appointment/**:id** | Delete an appointment using **id** |
-|9| *Get* | /appointment *or* / | List all appointments |
-|10| *Get* | /appointment/medic/**:id**/all | List all appointments for an medic using **id** |
-|11| *Get* | /appointment/medic/**:id** | Next appointment for an medic using **id** |
+|2| *Put* | /specialty/**id** | Update an specialty |
+|3| *Get* | /specialty | List all specialties |
+|4| *Post* | /medic | Register new medic |
+|5| *Put* | /medic/**:id** | Update an medic using **id** |
+|6| *Delete* | /medic/**:id** | Delete an medic using **id** |
+|7| *Post* | /appointment | Create an appointment |
+|8| *Put* | /appointment/**:id** | Update an appointment using **id** |
+|9| *Delete* | /appointment/**:id** | Delete an appointment using **id** |
+|10| *Get* | /appointment *or* / | List all appointments |
+|11| *Get* | /appointment/medic/**:id**/all | List all appointments for an medic using **id** |
+|12| *Get* | /appointment/medic/**:id** | Next appointment for an medic using **id** |
 
 
 
@@ -141,8 +142,28 @@
  ```
 
  ------------------------------------------------------------
+ 
+ 2. http://localhost:3333/specialty/ccf1167d-df15-4281-a68c-3830626b98df **(PUT)**
 
-2. http://localhost:3333/specialty **(GET)**
+##### Request [ body: JSON]
+```
+{
+	"description": "Cardiologista"
+}
+```
+
+##### Response [JSON]
+
+```
+{
+  "id": "ccf1167d-df15-4281-a68c-3830626b98df",
+  "description": "Cardiologista"
+}
+ ```
+
+ ------------------------------------------------------------
+
+3. http://localhost:3333/specialty **(GET)**
 
 
 ##### Response [JSON]
@@ -160,7 +181,7 @@
 
  ------------------------------------------------------------
 
-3. http://localhost:3333/medic **(POST)**
+4. http://localhost:3333/medic **(POST)**
 
 ##### Request [ body: JSON]
 ```
@@ -186,7 +207,7 @@
  ------------------------------------------------------------
 
 
-4. http://localhost:3333/medic/94babbaa-2a7e-4874-815b-5ded5b5269f0 **(PUT)**
+5. http://localhost:3333/medic/94babbaa-2a7e-4874-815b-5ded5b5269f0 **(PUT)**
 
 **Fields [name, specialty_id] optional**
 
@@ -212,7 +233,7 @@
 
  ------------------------------------------------------------
 
- 5. http://localhost:3333/medic/94babbaa-2a7e-4874-815b-5ded5b5269f0 **(DELETE)**
+ 6. http://localhost:3333/medic/94babbaa-2a7e-4874-815b-5ded5b5269f0 **(DELETE)**
 
 **Fields [name, specialty_id] optional**
 
@@ -227,7 +248,7 @@
 
  ------------------------------------------------------------
 
- 6. http://localhost:3333/appointment **(POST)**
+ 7. http://localhost:3333/appointment **(POST)**
 
 **Fields [name, specialty_id, species] is not optional**
 ##### Request [ body: JSON]
@@ -266,7 +287,7 @@
 
  ------------------------------------------------------------
 
- 7. http://localhost:3333/appointment/c269eae4-443a-4e40-bd83-bd0426e26274 **(PUT)**
+ 8. http://localhost:3333/appointment/c269eae4-443a-4e40-bd83-bd0426e26274 **(PUT)**
 
 **If [status === "Atendido"], this appointment gonna be deleted**
 ##### Request [ body: JSON]
@@ -299,7 +320,7 @@
 
  ------------------------------------------------------------
 
-  8. http://localhost:3333/appointment/94babbaa-2a7e-4874-815b-5ded5b5269f0 **(DELETE)**
+  9. http://localhost:3333/appointment/94babbaa-2a7e-4874-815b-5ded5b5269f0 **(DELETE)**
 
 
 ##### Response [JSON]
@@ -312,7 +333,7 @@
 
  ------------------------------------------------------------
 
- 9. http://localhost:3333/appointment **(GET)**
+ 10. http://localhost:3333/appointment **(GET)**
 
 
 ##### Response [JSON]
@@ -344,7 +365,7 @@
 
  ------------------------------------------------------------
 
- 10. http://localhost:3333/appointment/medic/94babbaa-2a7e-4874-815b-5ded5b5269f0/all **(GET)**
+ 11. http://localhost:3333/appointment/medic/94babbaa-2a7e-4874-815b-5ded5b5269f0/all **(GET)**
 
 
 ##### Response [JSON]
@@ -377,7 +398,7 @@
  ------------------------------------------------------------
 
 
- 11. http://localhost:3333/appointment/medic/94babbaa-2a7e-4874-815b-5ded5b5269f0 **(GET)**
+ 12. http://localhost:3333/appointment/medic/94babbaa-2a7e-4874-815b-5ded5b5269f0 **(GET)**
 
 **Seeks the doctor's next appointment, evaluating the required specialty, urgency and the status of the animals**
 
